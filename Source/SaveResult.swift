@@ -26,10 +26,10 @@ import Foundation
 public enum SaveResult: CustomStringConvertible, Equatable {
 
     /// The success result.
-    case Success
+    case success
 
     /// The failure result, containing an `NSError` instance that describes the error.
-    case Failure(NSError)
+    case failure(NSError)
 
 
     // MARK: Methods
@@ -38,7 +38,7 @@ public enum SaveResult: CustomStringConvertible, Equatable {
      - returns: The result's `NSError` if `.Failure`, otherwise `nil`.
      */
     public func error() -> NSError? {
-        if case .Failure(let error) = self {
+        if case .failure(let error) = self {
             return error
         }
         return nil
@@ -52,10 +52,10 @@ public enum SaveResult: CustomStringConvertible, Equatable {
         get {
             var str = "<\(SaveResult.self): "
             switch self {
-            case .Success:
-                str += ".Success"
-            case .Failure(let e):
-                str += ".Failure(\(e))"
+            case .success:
+                str += ".success"
+            case .failure(let e):
+                str += ".failure(\(e))"
             }
             return str + ">"
         }
