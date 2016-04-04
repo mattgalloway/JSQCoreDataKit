@@ -27,7 +27,9 @@ import ExampleModel
 
 class EmployeeViewController: UITableViewController, NSFetchedResultsControllerDelegate {
 
-    var stack: CoreDataStack!
+//    var stack: CoreDataStack!
+    
+    var manager: CoreDataManager!
 
     var frc: NSFetchedResultsController?
 
@@ -46,22 +48,20 @@ class EmployeeViewController: UITableViewController, NSFetchedResultsControllerD
     // MARK: Actions
 
     @IBAction func didTapAddButton(sender: UIBarButtonItem) {
-        stack.mainContext.performBlockAndWait {
-            Employee.newEmployee(self.stack.mainContext, company: self.company)
-            saveContext(self.stack.mainContext)
+        manager.threadContext().performBlockAndWait {
+            Employee.newEmployee(self.manager.threadContext(), company: self.company)
+            self.manager.saveContext()
         }
     }
 
     @IBAction func didTapTrashButton(sender: UIBarButtonItem) {
-        let backgroundChildContext = self.stack.childContext()
-
-        backgroundChildContext.performBlockAndWait {
-            let request = self.fetchRequest(backgroundChildContext)
+        self.manager.threadContext().performBlockAndWait {
+            let request = self.fetchRequest()
 
             do {
-                let objects = try fetch(request: request, inContext: backgroundChildContext)
-                deleteObjects(objects, inContext: backgroundChildContext)
-                saveContext(backgroundChildContext)
+                let objects = try self.manager.fetch(request: request)
+                self.manager.deleteObjects(objects)
+                self.manager.saveContext()
             } catch {
                 print("Error deleting objects: \(error)")
             }
@@ -71,8 +71,8 @@ class EmployeeViewController: UITableViewController, NSFetchedResultsControllerD
 
     // MARK: Helpers
 
-    func fetchRequest(context: NSManagedObjectContext) -> FetchRequest<Employee> {
-        let e = entity(name: Employee.entityName, context: context)
+    func fetchRequest() -> FetchRequest<Employee> {
+        let e = manager.entity(name: Employee.entityName)
         let fetch = FetchRequest<Employee>(entity: e)
         fetch.predicate = NSPredicate(format: "company == %@", company)
         fetch.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
@@ -80,10 +80,10 @@ class EmployeeViewController: UITableViewController, NSFetchedResultsControllerD
     }
 
     func setupFRC() {
-        let request = fetchRequest(self.stack.mainContext)
+        let request = fetchRequest()
 
         self.frc = NSFetchedResultsController(fetchRequest: request,
-                                              managedObjectContext: self.stack.mainContext,
+                                              managedObjectContext: self.manager.threadContext(),
                                               sectionNameKeyPath: nil,
                                               cacheName: nil)
 
@@ -138,8 +138,8 @@ class EmployeeViewController: UITableViewController, NSFetchedResultsControllerD
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             let obj = frc?.objectAtIndexPath(indexPath) as! Employee
-            deleteObjects([obj], inContext: self.stack.mainContext)
-            saveContext(self.stack.mainContext)
+            manager.deleteObjects([obj])
+            manager.saveContext()
         }
     }
 

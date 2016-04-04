@@ -30,7 +30,8 @@ class CompanyViewController: UITableViewController, NSFetchedResultsControllerDe
     var stack: CoreDataStack!
 
     var frc: NSFetchedResultsController?
-
+    
+    var manager: CoreDataManager!
 
     // MARK: View lifecycle
 
@@ -46,6 +47,7 @@ class CompanyViewController: UITableViewController, NSFetchedResultsControllerDe
             switch result {
             case .success(let s):
                 self.stack = s
+                self.manager = CoreDataManager(stack: self.stack)
                 self.setupFRC()
 
             case .failure(let err):
@@ -63,7 +65,8 @@ class CompanyViewController: UITableViewController, NSFetchedResultsControllerDe
         if segue.identifier == "segue" {
             let employeeVC = segue.destinationViewController as! EmployeeViewController
             let company = frc?.objectAtIndexPath(tableView.indexPathForSelectedRow!) as! Company
-            employeeVC.stack = self.stack
+            //employeeVC.stack = self.stack
+            employeeVC.manager = self.manager
             employeeVC.company = company
         }
     }
@@ -71,18 +74,18 @@ class CompanyViewController: UITableViewController, NSFetchedResultsControllerDe
 
     // MARK: Helpers
 
-    func fetchRequest(context: NSManagedObjectContext) -> FetchRequest<Company> {
-        let e = entity(name: Company.entityName, context: context)
+    func fetchRequest() -> FetchRequest<Company> {
+        let e = self.manager.entity(name: Company.entityName)
         let fetch = FetchRequest<Company>(entity: e)
         fetch.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         return fetch
     }
 
     func setupFRC() {
-        let request = fetchRequest(self.stack.mainContext)
+        let request = fetchRequest()
 
         self.frc = NSFetchedResultsController(fetchRequest: request,
-                                              managedObjectContext: self.stack.mainContext,
+                                              managedObjectContext: self.manager.threadContext(),
                                               sectionNameKeyPath: nil,
                                               cacheName: nil)
 
@@ -117,22 +120,21 @@ class CompanyViewController: UITableViewController, NSFetchedResultsControllerDe
     // MARK: Actions
 
     func didTapAddButton(sender: UIBarButtonItem) {
-        stack.mainContext.performBlockAndWait {
-            Company.newCompany(self.stack.mainContext)
-            saveContext(self.stack.mainContext)
+        self.manager.threadContext().performBlockAndWait {
+            Company.newCompany(self.manager.threadContext())
+            self.manager.saveContext()
         }
     }
 
     @IBAction func didTapTrashButton(sender: UIBarButtonItem) {
-        let backgroundChildContext = self.stack.childContext()
-
-        backgroundChildContext.performBlockAndWait {
-            let request = self.fetchRequest(backgroundChildContext)
+        
+        self.manager.threadContext().performBlockAndWait {
+            let request = self.fetchRequest()
 
             do {
-                let objects = try fetch(request: request, inContext: backgroundChildContext)
-                deleteObjects(objects, inContext: backgroundChildContext)
-                saveContext(backgroundChildContext)
+                let objects = try self.manager.fetch(request: request)
+                self.manager.deleteObjects(objects)
+                self.manager.saveContext()
             } catch {
                 print("Error deleting objects: \(error)")
             }
@@ -177,8 +179,8 @@ class CompanyViewController: UITableViewController, NSFetchedResultsControllerDe
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             let obj = frc?.objectAtIndexPath(indexPath) as! Company
-            deleteObjects([obj], inContext: self.stack.mainContext)
-            saveContext(self.stack.mainContext)
+            self.manager.deleteObjects([obj])
+            self.manager.saveContext()
         }
     }
 

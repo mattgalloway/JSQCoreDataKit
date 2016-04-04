@@ -92,7 +92,7 @@ public class CoreDataManager: CustomStringConvertible {
         if realizedContext == nil {
             realizedContext = threadContext()
         }
-        saveContext(realizedContext!, wait: wait, completion: completion)
+        xsaveContext(realizedContext!, wait: wait, completion: completion)
     }
     
     public func entity(name name: String, context: NSManagedObjectContext? = nil) -> NSEntityDescription {
@@ -100,7 +100,7 @@ public class CoreDataManager: CustomStringConvertible {
         if realizedContext == nil {
             realizedContext = threadContext()
         }
-        return entity(name: name, context: realizedContext!)
+        return xentity(name: name, context: realizedContext!)
     }
     
     public func fetch <T: NSManagedObject>(request request: FetchRequest<T>, inContext context: NSManagedObjectContext? = nil) throws -> [T] {
@@ -113,7 +113,7 @@ public class CoreDataManager: CustomStringConvertible {
         var caughtError: NSError?
         
         do{
-            results = try fetch(request: request, inContext: realizedContext!)
+            results = try xfetch(request: request, inContext: realizedContext!)
         } catch {
             caughtError = error as NSError
         }
@@ -126,7 +126,7 @@ public class CoreDataManager: CustomStringConvertible {
         if realizedContext == nil {
             realizedContext = threadContext()
         }
-        deleteObjects(objects, inContext: realizedContext!)
+        xdeleteObjects(objects, inContext: realizedContext!)
     }
     
     // MARK: CustomStringConvertible
