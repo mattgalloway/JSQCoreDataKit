@@ -49,8 +49,11 @@ public class CoreDataManager: CustomStringConvertible {
         NSNotificationCenter.defaultCenter().removeObserver(self);
     }
  
+    
+    // MARK: Thread Context Manangement
+    
     public func threadContext() -> NSManagedObjectContext {
-        if (NSThread.isMainThread()) {
+        if NSThread.isMainThread() {
             return stack.mainContext;
         } else {
             let threadDictionary = NSThread.currentThread().threadDictionary;
@@ -80,6 +83,50 @@ public class CoreDataManager: CustomStringConvertible {
         }
         threadDictionary.removeObjectForKey("JSQThreadContextId")
         threadContexts.removeValueForKey(threadContextId)
+    }
+    
+    // MARK: Pass-Thru Context Dependent Mathods
+    
+    public func saveContext(context: NSManagedObjectContext? = nil, wait: Bool = true, completion: ((SaveResult) -> Void)? = nil) {
+        var realizedContext = context
+        if realizedContext == nil {
+            realizedContext = threadContext()
+        }
+        saveContext(realizedContext!, wait: wait, completion: completion)
+    }
+    
+    public func entity(name name: String, context: NSManagedObjectContext? = nil) -> NSEntityDescription {
+        var realizedContext = context
+        if realizedContext == nil {
+            realizedContext = threadContext()
+        }
+        return entity(name: name, context: realizedContext!)
+    }
+    
+    public func fetch <T: NSManagedObject>(request request: FetchRequest<T>, inContext context: NSManagedObjectContext? = nil) throws -> [T] {
+        var realizedContext = context
+        if realizedContext == nil {
+            realizedContext = threadContext()
+        }
+        
+        var results = [AnyObject]()
+        var caughtError: NSError?
+        
+        do{
+            results = try fetch(request: request, inContext: realizedContext!)
+        } catch {
+            caughtError = error as NSError
+        }
+        guard caughtError == nil else { throw caughtError! }
+        return results as! [T]
+    }
+    
+    public func deleteObjects <T: NSManagedObject>(objects: [T], inContext context: NSManagedObjectContext? = nil) {
+        var realizedContext = context
+        if realizedContext == nil {
+            realizedContext = threadContext()
+        }
+        deleteObjects(objects, inContext: realizedContext!)
     }
     
     // MARK: CustomStringConvertible
