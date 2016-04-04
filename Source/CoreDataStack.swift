@@ -137,6 +137,7 @@ public final class CoreDataStack: CustomStringConvertible, Equatable {
             return
         }
 
+        print ("didReceiveChildContextDidSaveNotification for \(context.name)")
         guard let parentContext = context.parentContext else {
             // have reached the root context, nothing to do
             return

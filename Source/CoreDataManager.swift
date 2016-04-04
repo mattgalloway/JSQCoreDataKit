@@ -54,6 +54,7 @@ public class CoreDataManager: CustomStringConvertible {
     
     public func threadContext() -> NSManagedObjectContext {
         if NSThread.isMainThread() {
+            print ("returning main thread context")
             return stack.mainContext;
         } else {
             let threadDictionary = NSThread.currentThread().threadDictionary;
@@ -63,6 +64,7 @@ public class CoreDataManager: CustomStringConvertible {
                 threadDictionary["JSQThreadContextId"] = threadContextId
                 threadContexts[threadContextId!] = stack.backgroundContext
             }
+            print ("returning context with id \(threadContextId)")
             return threadContexts[threadContextId!]!
         }
     }

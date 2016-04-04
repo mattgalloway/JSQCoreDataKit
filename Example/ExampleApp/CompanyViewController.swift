@@ -127,20 +127,23 @@ class CompanyViewController: UITableViewController, NSFetchedResultsControllerDe
     }
 
     @IBAction func didTapTrashButton(sender: UIBarButtonItem) {
-        
-        self.manager.threadContext().performBlockAndWait {
-            let request = self.fetchRequest()
-
-            do {
-                let objects = try self.manager.fetch(request: request)
-                self.manager.deleteObjects(objects)
-                self.manager.saveContext()
-            } catch {
-                print("Error deleting objects: \(error)")
+        let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+        print("Hello")
+        dispatch_async(dispatch_get_global_queue(priority, 0)) {
+            self.manager.threadContext().performBlockAndWait {
+                let request = self.fetchRequest()
+                
+                do {
+                    let objects = try self.manager.fetch(request: request)
+                    print("objects to delete: \(objects.count)")
+                    self.manager.deleteObjects(objects)
+                    self.manager.saveContext()
+                } catch {
+                    print("Error deleting objects: \(error)")
+                }
             }
         }
     }
-
 
     // MARK: Table view data source
 
