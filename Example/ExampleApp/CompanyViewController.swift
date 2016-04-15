@@ -31,7 +31,7 @@ class CompanyViewController: UITableViewController, NSFetchedResultsControllerDe
 
     var frc: NSFetchedResultsController?
     
-    var manager: CoreDataManager!
+    var manager: CoreDataContextManager!
 
     // MARK: View lifecycle
 
@@ -47,7 +47,7 @@ class CompanyViewController: UITableViewController, NSFetchedResultsControllerDe
             switch result {
             case .success(let s):
                 self.stack = s
-                self.manager = CoreDataManager(stack: self.stack)
+                self.manager = CoreDataContextManager(stack: self.stack)
                 self.setupFRC()
 
             case .failure(let err):

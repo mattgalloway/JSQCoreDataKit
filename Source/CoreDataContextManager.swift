@@ -17,7 +17,7 @@
 import Foundation
 import CoreData
 
-public class CoreDataManager: CustomStringConvertible {
+public class CoreDataContextManager: CustomStringConvertible {
     
     // MARK: Properties
     
@@ -30,11 +30,18 @@ public class CoreDataManager: CustomStringConvertible {
     // MARK: Initialization
     
     /**
-     Constructs a new `CoreDataManager` instance with the specified CoreDataStack.
+     Constructs a new `CoreDataContextManager` instance with the specified CoreDataStack.  The 
+     CoreDataContextManager object will create one NSManagedContext for each background thread 
+     or return the main context if called on the main thread. Each thread context is mapped to
+     it's thread and is retained for the life of the thread. When the thread dies, the reference 
+     to the associated context is removed. 
      
-     - parameter stack:     The Core Data Stack to manange.
+     Conveinence methods are provided for saving, creating entities descriptions, performing 
+     fetches and deleting objects without the need to specify a context.
      
-     - returns: A new `CoreDataManagerl` instance.
+     - parameter stack: The Core Data Stack to for which the contexts will be mananged.
+     
+     - returns: A new `CoreDataContextManager` instance.
      */
     public init(stack: CoreDataStack) {
         self.stack = stack
@@ -94,7 +101,7 @@ public class CoreDataManager: CustomStringConvertible {
         if realizedContext == nil {
             realizedContext = threadContext()
         }
-        xsaveContext(realizedContext!, wait: wait, completion: completion)
+        JSQCoreDataKit.saveContext(realizedContext!, wait: wait, completion: completion)
     }
     
     public func entity(name name: String, context: NSManagedObjectContext? = nil) -> NSEntityDescription {
@@ -102,7 +109,7 @@ public class CoreDataManager: CustomStringConvertible {
         if realizedContext == nil {
             realizedContext = threadContext()
         }
-        return xentity(name: name, context: realizedContext!)
+        return JSQCoreDataKit.entity(name: name, context: realizedContext!)
     }
     
     public func fetch <T: NSManagedObject>(request request: FetchRequest<T>, inContext context: NSManagedObjectContext? = nil) throws -> [T] {
@@ -114,12 +121,12 @@ public class CoreDataManager: CustomStringConvertible {
         var results = [AnyObject]()
         var caughtError: NSError?
         
-        do{
-            results = try xfetch(request: request, inContext: realizedContext!)
+        do {
+            results = try JSQCoreDataKit.fetch(request: request, inContext: realizedContext!)
         } catch {
             caughtError = error as NSError
         }
-        guard caughtError == nil else { throw caughtError! }
+        guard caughtError == nil else {throw caughtError!}
         return results as! [T]
     }
     
@@ -128,7 +135,20 @@ public class CoreDataManager: CustomStringConvertible {
         if realizedContext == nil {
             realizedContext = threadContext()
         }
-        xdeleteObjects(objects, inContext: realizedContext!)
+        JSQCoreDataKit.deleteObjects(objects, inContext: realizedContext!)
+    }
+    
+    public func existingObjectWithID(objectID: NSManagedObjectID) throws -> NSManagedObject {
+        var managedObject: NSManagedObject? = nil
+        var caughtError: NSError?
+        
+        do {
+            managedObject = try threadContext().existingObjectWithID(objectID)
+        } catch  {
+            caughtError = error as NSError
+        }
+        guard caughtError == nil else {throw caughtError!}
+        return managedObject as NSManagedObject!
     }
     
     // MARK: CustomStringConvertible

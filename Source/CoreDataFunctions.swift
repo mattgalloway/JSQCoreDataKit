@@ -29,7 +29,7 @@ import Foundation
  - parameter wait:       If `true` (the default), saves synchronously. If `false`, saves asynchronously.
  - parameter completion: The closure to be executed when the save operation completes.
  */
-public func xsaveContext(context: NSManagedObjectContext, wait: Bool = true, completion: ((SaveResult) -> Void)? = nil) {
+public func saveContext(context: NSManagedObjectContext, wait: Bool = true, completion: ((SaveResult) -> Void)? = nil) {
     let block = {
         guard context.hasChanges else { return }
         do {
@@ -54,7 +54,7 @@ public func xsaveContext(context: NSManagedObjectContext, wait: Bool = true, com
  - returns: The entity with the specified name from the managed object
  model associated with context’s persistent store coordinator.
  */
-public func xentity(name name: String, context: NSManagedObjectContext) -> NSEntityDescription {
+public func entity(name name: String, context: NSManagedObjectContext) -> NSEntityDescription {
     return NSEntityDescription.entityForName(name, inManagedObjectContext: context)!
 }
 
@@ -94,7 +94,7 @@ public class FetchRequest <T: NSManagedObject>: NSFetchRequest {
 
  - returns: An array of objects that meet the criteria specified by the fetch request. This array may be empty.
  */
-public func xfetch <T: NSManagedObject>(request request: FetchRequest<T>, inContext context: NSManagedObjectContext) throws -> [T] {
+public func fetch <T: NSManagedObject>(request request: FetchRequest<T>, inContext context: NSManagedObjectContext) throws -> [T] {
     var results = [AnyObject]()
     var caughtError: NSError?
 
@@ -122,7 +122,7 @@ public func xfetch <T: NSManagedObject>(request request: FetchRequest<T>, inCont
  - parameter objects: The managed objects to be deleted.
  - parameter context: The context to which the objects belong.
  */
-public func xdeleteObjects <T: NSManagedObject>(objects: [T], inContext context: NSManagedObjectContext) {
+public func deleteObjects <T: NSManagedObject>(objects: [T], inContext context: NSManagedObjectContext) {
     guard objects.count != 0 else { return }
 
     context.performBlockAndWait {

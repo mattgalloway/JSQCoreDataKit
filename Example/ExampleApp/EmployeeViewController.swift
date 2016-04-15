@@ -29,7 +29,7 @@ class EmployeeViewController: UITableViewController, NSFetchedResultsControllerD
 
 //    var stack: CoreDataStack!
     
-    var manager: CoreDataManager!
+    var manager: CoreDataContextManager!
 
     var frc: NSFetchedResultsController?
 

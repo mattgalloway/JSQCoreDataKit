@@ -143,7 +143,7 @@ public final class CoreDataStack: CustomStringConvertible, Equatable {
             return
         }
         
-        xsaveContext(parentContext)
+        saveContext(parentContext)
     }
     
 }

@@ -65,11 +65,11 @@
 		8873E2691C51E10100DFE009 /* StoreTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873E25A1C51E10100DFE009 /* StoreTypeTests.swift */; };
 		8873E26A1C51E10100DFE009 /* TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873E25B1C51E10100DFE009 /* TestCase.swift */; };
 		8873E2C11C51E3D400DFE009 /* ExampleModel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8873E2C01C51E3B000DFE009 /* ExampleModel.framework */; };
-		AF2DC7AB1CB229AE00190F93 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2DC7AA1CB229AE00190F93 /* CoreDataManager.swift */; };
-		AF2DC7AC1CB229AE00190F93 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2DC7AA1CB229AE00190F93 /* CoreDataManager.swift */; };
-		AF2DC7AD1CB229AE00190F93 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2DC7AA1CB229AE00190F93 /* CoreDataManager.swift */; };
-		AF2DC7AE1CB229AE00190F93 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2DC7AA1CB229AE00190F93 /* CoreDataManager.swift */; };
-		AF2DC7AF1CB229AE00190F93 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2DC7AA1CB229AE00190F93 /* CoreDataManager.swift */; };
+		AF2DC7AB1CB229AE00190F93 /* CoreDataContextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2DC7AA1CB229AE00190F93 /* CoreDataContextManager.swift */; };
+		AF2DC7AC1CB229AE00190F93 /* CoreDataContextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2DC7AA1CB229AE00190F93 /* CoreDataContextManager.swift */; };
+		AF2DC7AD1CB229AE00190F93 /* CoreDataContextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2DC7AA1CB229AE00190F93 /* CoreDataContextManager.swift */; };
+		AF2DC7AE1CB229AE00190F93 /* CoreDataContextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2DC7AA1CB229AE00190F93 /* CoreDataContextManager.swift */; };
+		AF2DC7AF1CB229AE00190F93 /* CoreDataContextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2DC7AA1CB229AE00190F93 /* CoreDataContextManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -131,7 +131,7 @@
 		8873E2BB1C51E3B000DFE009 /* ExampleModel.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ExampleModel.xcodeproj; path = Example/ExampleModel/ExampleModel.xcodeproj; sourceTree = SOURCE_ROOT; };
 		887403131C0D6A6D00FE0C31 /* JSQCoreDataKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JSQCoreDataKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88AC4B331C0FD8DA00A04563 /* JSQCoreDataKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JSQCoreDataKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AF2DC7AA1CB229AE00190F93 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		AF2DC7AA1CB229AE00190F93 /* CoreDataContextManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataContextManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,7 +199,7 @@
 		8873E21C1C51E09700DFE009 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				AF2DC7AA1CB229AE00190F93 /* CoreDataManager.swift */,
+				AF2DC7AA1CB229AE00190F93 /* CoreDataContextManager.swift */,
 				8873E21E1C51E09700DFE009 /* CoreDataFunctions.swift */,
 				8873E21F1C51E09700DFE009 /* CoreDataModel.swift */,
 				8873E2211C51E09700DFE009 /* CoreDataStack.swift */,
@@ -494,7 +494,7 @@
 				8873E2281C51E09700DFE009 /* CoreDataFunctions.swift in Sources */,
 				8873E22D1C51E09700DFE009 /* StackResult.swift in Sources */,
 				8873E2271C51E09700DFE009 /* Equatable.swift in Sources */,
-				AF2DC7AB1CB229AE00190F93 /* CoreDataManager.swift in Sources */,
+				AF2DC7AB1CB229AE00190F93 /* CoreDataContextManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -516,7 +516,7 @@
 				8873E25E1C51E10100DFE009 /* ExampleModelTests.swift in Sources */,
 				8873E2611C51E10100DFE009 /* ModelTests.swift in Sources */,
 				8873E2691C51E10100DFE009 /* StoreTypeTests.swift in Sources */,
-				AF2DC7AC1CB229AE00190F93 /* CoreDataManager.swift in Sources */,
+				AF2DC7AC1CB229AE00190F93 /* CoreDataContextManager.swift in Sources */,
 				8873E25C1C51E10100DFE009 /* ContextSyncTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -533,7 +533,7 @@
 				8873E23E1C51E0DE00DFE009 /* CoreDataModel.swift in Sources */,
 				8873E23D1C51E0DE00DFE009 /* CoreDataFunctions.swift in Sources */,
 				8873E2421C51E0DE00DFE009 /* StackResult.swift in Sources */,
-				AF2DC7AE1CB229AE00190F93 /* CoreDataManager.swift in Sources */,
+				AF2DC7AE1CB229AE00190F93 /* CoreDataContextManager.swift in Sources */,
 				8873E23C1C51E0DE00DFE009 /* Equatable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -550,7 +550,7 @@
 				8873E2361C51E0DD00DFE009 /* CoreDataModel.swift in Sources */,
 				8873E2351C51E0DD00DFE009 /* CoreDataFunctions.swift in Sources */,
 				8873E23A1C51E0DD00DFE009 /* StackResult.swift in Sources */,
-				AF2DC7AD1CB229AE00190F93 /* CoreDataManager.swift in Sources */,
+				AF2DC7AD1CB229AE00190F93 /* CoreDataContextManager.swift in Sources */,
 				8873E2341C51E0DD00DFE009 /* Equatable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -567,7 +567,7 @@
 				8873E2461C51E0DE00DFE009 /* CoreDataModel.swift in Sources */,
 				8873E2451C51E0DE00DFE009 /* CoreDataFunctions.swift in Sources */,
 				8873E24A1C51E0DE00DFE009 /* StackResult.swift in Sources */,
-				AF2DC7AF1CB229AE00190F93 /* CoreDataManager.swift in Sources */,
+				AF2DC7AF1CB229AE00190F93 /* CoreDataContextManager.swift in Sources */,
 				8873E2441C51E0DE00DFE009 /* Equatable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
